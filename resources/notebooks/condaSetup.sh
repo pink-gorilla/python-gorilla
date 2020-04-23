@@ -11,7 +11,8 @@ conda run -n pyclj python3 -mpip install numpy
 
 conda run -n pyclj python3 -mpip install \
   seaborn matplotlib sklearn numpy pandas \
-  umap-learn trimap 
+  umap-learn trimap bokeh
+  
   
 # seems to be included above somewhere
 # mxnet
