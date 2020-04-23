@@ -1,16 +1,16 @@
 (ns pinkgorilla.python.plot
   (:require
-   [clojure.java.io :refer [as-file file]]
+   [clojure.java.io :refer [as-file #_file]]
    [libpython-clj.require :refer [require-python]]
-   [libpython-clj.python :as py :refer [py. py.. py.-]]
+   [libpython-clj.python :as py :refer [py. #_py.. #_py.-]]
    [pinkgorilla.ui.image :refer [image-view]]) ; bring BufferedImage renderer to scope
   (:import java.awt.image.BufferedImage)
-  (:import [java.awt Graphics2D Image Color])
-  (:import [java.awt.image BufferedImage BufferedImageOp])
-  (:import [javax.imageio ImageIO IIOImage ImageWriter ImageWriteParam])
+  (:import [java.awt Graphics2D #_Image #_Color])
+  (:import [java.awt.image BufferedImage #_BufferedImageOp])
+  (:import [javax.imageio ImageIO #_IIOImage #_ImageWriter #_ImageWriteParam])
   (:import java.io.File
            java.io.InputStream
-           java.net.URI
+           #_java.net.URI
            java.net.URL
            javax.imageio.ImageIO
            java.awt.image.BufferedImage))
