@@ -95,6 +95,8 @@
 ;;;; have to set the headless mode before requiring pyplot
 
 
+(defn python-init! [])
+
 (def mplt (py/import-module "matplotlib"))
 (py. mplt "use" "Agg")
 

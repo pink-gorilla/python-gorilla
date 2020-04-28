@@ -44,7 +44,7 @@ nil
 ;; **
 
 ;; @@ [clj]
-(vega/scatterplot [{:a 1 :b 2} {:a 2 :b 3}] :a :b)
+ (vega/scatterplot [{:a 1 :b 2} {:a 2 :b 3}] :a :b)
 ;; @@
 ;; =>
 ;;; ["^ ","~:type","~:reagent","~:content",["^ ","~:hiccup",["^ ","~:$schema","https://vega.github.io/schema/vega/v5.json","~:autosize",["^ ","^0","fit","~:resize",true,"~:contains","padding"],"~:width",800,"~:height",450,"~:axes",[["^ ","~:scale","x","~:grid",true,"~:orient","bottom","~:title","~:a","~:domain",false],["^ ","^;","y","^<",true,"^=","left","^>","~:b","^?",false]],"~:scales",["~#list",[["^ ","~:zero",false,"~:name","x","^0","linear","~:round",true,"~:nice",true,"^?",["^ ","~:data","source","~:field","~:a"],"~:range","width"],["^ ","^B",false,"^C","y","^0","linear","^D",true,"^E",true,"^?",["^ ","^F","source","^G","~:b"],"^H","height"]]],"~:marks",[["^ ","~:encode",["^ ","~:update",["^ ","~:fill",["^ ","~:value","#222"],"~:stroke",["^ ","^M","#222"],"~:opacity",["^ ","^M",0.5],"~:shape",["^ ","^M","circle"],"~:x",["^ ","^G","~:a","^;","x"],"~:y",["^ ","^G","~:b","^;","y"]]],"~:from",["^ ","^F","source"],"^0","symbol"]],"^F",[["^ ","^C","source","~:values",[["^ ","~:a",1,"~:b",2],["^ ","~:a",2,"~:b",3]]]]],"~:map-keywords",true,"~:widget",true]]

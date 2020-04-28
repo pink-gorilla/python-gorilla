@@ -21,7 +21,7 @@
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [clj-python/libpython-clj "1.40"]
                  ;; pinkgorilla-vizualisation
-                 [org.pinkgorilla/gorilla-renderable "3.0.5"] ; to implement pink-gorilla renderer
+                 [org.pinkgorilla/gorilla-renderable "3.0.7"] ; to implement pink-gorilla renderer
              ]
 
   :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
