@@ -33,7 +33,7 @@
                        ; bundle the notebook (big bundle) into python-gorilla library 
                     :source-paths ["profiles/notebook/src"]
                     :main notebook.main ; ^:skip-aot 
-                    :dependencies [[org.pinkgorilla/gorilla-notebook "0.4.16-SNAPSHOT"]]
+                    :dependencies [[org.pinkgorilla/gorilla-notebook "0.4.17"]]
                     :repl-options {:welcome (println "Profile: gorilla")
                                    :init-ns notebook.main  ;; Specify the ns to start the REPL in (overrides :main in this case only)
                                    :init (start) ;; This expression will run when first opening a REPL, in the namespace from :init-ns or :main if specified.
