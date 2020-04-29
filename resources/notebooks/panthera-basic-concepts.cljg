@@ -1,0 +1,647 @@
+;; gorilla-repl.fileformat = 2
+
+;; @@ [meta]
+{:tagline "Jupyter Notebook"}
+
+;; @@
+
+;; **
+;;; # Basic panthera concepts
+;;; 
+;;; This is an introductory guide to the concepts driving panthera and its usage.
+;;; 
+;;; ## Setup
+;;; 
+;;; Let's add panthera to our classpath and require it to start playing around.
+;; **
+
+;; @@ [clj]
+(use '[pinkgorilla.notebook.repl]) 
+(pinkgorilla.notebook.repl/add-dependencies 
+   '[panthera "0.1-alpha.13"])
+
+;; @@
+;; =>
+;;; ["^ ","~:type","~:list-like","~:open",["~:span",["^ ","~:class","clj-map"],"{"],"~:close",["^3",["^ ","^4","clj-map"],"}"],"~:separator",["^3",", "],"~:items",["~#list",[["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","~:html","~:content",["^3",["^ ","^4","clj-symbol"],"org.clojure/core.memoize"],"~:value","org.clojure/core.memoize"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.7.2\""],"^;","\"0.7.2\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6e7809df \"org.clojure:core.memoize:jar:0.7.2 (compile)\"], :file #object[java.io.File 0xa3a1dad \"/home/andreas/.m2/repository/org/clojure/core.memoize/0.7.2/core.memoize-0.7.2.jar\"]} [org.clojure/core.memoize \"0.7.2\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-set"],"#{"],"^5",["^3",["^ ","^4","clj-set"],"}"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/core.cache"],"^;","org.clojure/core.cache"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.7.1\""],"^;","\"0.7.1\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x40597231 \"org.clojure:core.cache:jar:0.7.1 (compile)\"], :file #object[java.io.File 0x2879431e \"/home/andreas/.m2/repository/org/clojure/core.cache/0.7.1/core.cache-0.7.1.jar\"]} [org.clojure/core.cache \"0.7.1\"]"]]],"^;","#{^{:dependency #object[org.eclipse.aether.graph.Dependency 0x40597231 \"org.clojure:core.cache:jar:0.7.1 (compile)\"], :file #object[java.io.File 0x2879431e \"/home/andreas/.m2/repository/org/clojure/core.cache/0.7.1/core.cache-0.7.1.jar\"]} [org.clojure/core.cache \"0.7.1\"]}"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6e7809df \"org.clojure:core.memoize:jar:0.7.2 (compile)\"], :file #object[java.io.File 0xa3a1dad \"/home/andreas/.m2/repository/org/clojure/core.memoize/0.7.2/core.memoize-0.7.2.jar\"]} [org.clojure/core.memoize \"0.7.2\"] #{^{:dependency #object[org.eclipse.aether.graph.Dependency 0x40597231 \"org.clojure:core.cache:jar:0.7.1 (compile)\"], :file #object[java.io.File 0x2879431e \"/home/andreas/.m2/repository/org/clojure/core.cache/0.7.1/core.cache-0.7.1.jar\"]} [org.clojure/core.cache \"0.7.1\"]}]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.apache.commons/commons-math3"],"^;","org.apache.commons/commons-math3"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"3.6.1\""],"^;","\"3.6.1\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6e1813f \"org.apache.commons:commons-math3:jar:3.6.1 (compile)\"], :file #object[java.io.File 0x5c6c333b \"/home/andreas/.m2/repository/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar\"]} [org.apache.commons/commons-math3 \"3.6.1\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6e1813f \"org.apache.commons:commons-math3:jar:3.6.1 (compile)\"], :file #object[java.io.File 0x5c6c333b \"/home/andreas/.m2/repository/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar\"]} [org.apache.commons/commons-math3 \"3.6.1\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"com.tdunning/t-digest"],"^;","com.tdunning/t-digest"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"3.2\""],"^;","\"3.2\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x57af1a7d \"com.tdunning:t-digest:jar:3.2 (compile)\"], :file #object[java.io.File 0x352cd225 \"/home/andreas/.m2/repository/com/tdunning/t-digest/3.2/t-digest-3.2.jar\"]} [com.tdunning/t-digest \"3.2\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x57af1a7d \"com.tdunning:t-digest:jar:3.2 (compile)\"], :file #object[java.io.File 0x352cd225 \"/home/andreas/.m2/repository/com/tdunning/t-digest/3.2/t-digest-3.2.jar\"]} [com.tdunning/t-digest \"3.2\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"cnuernber/libpython-clj"],"^;","cnuernber/libpython-clj"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"1.0\""],"^;","\"1.0\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x3f4e45c6 \"cnuernber:libpython-clj:jar:1.0 (compile)\"], :file #object[java.io.File 0x2064cff \"/home/andreas/.m2/repository/cnuernber/libpython-clj/1.0/libpython-clj-1.0.jar\"]} [cnuernber/libpython-clj \"1.0\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-set"],"#{"],"^5",["^3",["^ ","^4","clj-set"],"}"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"camel-snake-kebab"],"^;","camel-snake-kebab"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.4.0\""],"^;","\"0.4.0\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x2dd5c230 \"camel-snake-kebab:camel-snake-kebab:jar:0.4.0 (compile)\"], :file #object[java.io.File 0x7e3b9055 \"/home/andreas/.m2/repository/camel-snake-kebab/camel-snake-kebab/0.4.0/camel-snake-kebab-0.4.0.jar\"]} [camel-snake-kebab \"0.4.0\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"techascent/tech.datatype"],"^;","techascent/tech.datatype"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"4.0\""],"^;","\"4.0\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x33969a21 \"techascent:tech.datatype:jar:4.0 (compile)\"], :file #object[java.io.File 0x3c74918 \"/home/andreas/.m2/repository/techascent/tech.datatype/4.0/tech.datatype-4.0.jar\"]} [techascent/tech.datatype \"4.0\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/clojure"],"^;","org.clojure/clojure"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"1.10.1\""],"^;","\"1.10.1\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0xcf12 \"org.clojure:clojure:jar:1.10.1 (compile)\"], :file #object[java.io.File 0x229b4e7f \"/home/andreas/.m2/repository/org/clojure/clojure/1.10.1/clojure-1.10.1.jar\"]} [org.clojure/clojure \"1.10.1\"]"]]],"^;","#{^{:dependency #object[org.eclipse.aether.graph.Dependency 0x2dd5c230 \"camel-snake-kebab:camel-snake-kebab:jar:0.4.0 (compile)\"], :file #object[java.io.File 0x7e3b9055 \"/home/andreas/.m2/repository/camel-snake-kebab/camel-snake-kebab/0.4.0/camel-snake-kebab-0.4.0.jar\"]} [camel-snake-kebab \"0.4.0\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x33969a21 \"techascent:tech.datatype:jar:4.0 (compile)\"], :file #object[java.io.File 0x3c74918 \"/home/andreas/.m2/repository/techascent/tech.datatype/4.0/tech.datatype-4.0.jar\"]} [techascent/tech.datatype \"4.0\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0xcf12 \"org.clojure:clojure:jar:1.10.1 (compile)\"], :file #object[java.io.File 0x229b4e7f \"/home/andreas/.m2/repository/org/clojure/clojure/1.10.1/clojure-1.10.1.jar\"]} [org.clojure/clojure \"1.10.1\"]}"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x3f4e45c6 \"cnuernber:libpython-clj:jar:1.0 (compile)\"], :file #object[java.io.File 0x2064cff \"/home/andreas/.m2/repository/cnuernber/libpython-clj/1.0/libpython-clj-1.0.jar\"]} [cnuernber/libpython-clj \"1.0\"] #{^{:dependency #object[org.eclipse.aether.graph.Dependency 0x2dd5c230 \"camel-snake-kebab:camel-snake-kebab:jar:0.4.0 (compile)\"], :file #object[java.io.File 0x7e3b9055 \"/home/andreas/.m2/repository/camel-snake-kebab/camel-snake-kebab/0.4.0/camel-snake-kebab-0.4.0.jar\"]} [camel-snake-kebab \"0.4.0\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x33969a21 \"techascent:tech.datatype:jar:4.0 (compile)\"], :file #object[java.io.File 0x3c74918 \"/home/andreas/.m2/repository/techascent/tech.datatype/4.0/tech.datatype-4.0.jar\"]} [techascent/tech.datatype \"4.0\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0xcf12 \"org.clojure:clojure:jar:1.10.1 (compile)\"], :file #object[java.io.File 0x229b4e7f \"/home/andreas/.m2/repository/org/clojure/clojure/1.10.1/clojure-1.10.1.jar\"]} [org.clojure/clojure \"1.10.1\"]}]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"techascent/tech.jna"],"^;","techascent/tech.jna"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"3.18\""],"^;","\"3.18\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x255b9f9f \"techascent:tech.jna:jar:3.18 (compile)\"], :file #object[java.io.File 0x1ced8da5 \"/home/andreas/.m2/repository/techascent/tech.jna/3.18/tech.jna-3.18.jar\"]} [techascent/tech.jna \"3.18\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x255b9f9f \"techascent:tech.jna:jar:3.18 (compile)\"], :file #object[java.io.File 0x1ced8da5 \"/home/andreas/.m2/repository/techascent/tech.jna/3.18/tech.jna-3.18.jar\"]} [techascent/tech.jna \"3.18\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"camel-snake-kebab"],"^;","camel-snake-kebab"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.4.0\""],"^;","\"0.4.0\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x2dd5c230 \"camel-snake-kebab:camel-snake-kebab:jar:0.4.0 (compile)\"], :file #object[java.io.File 0x7e3b9055 \"/home/andreas/.m2/repository/camel-snake-kebab/camel-snake-kebab/0.4.0/camel-snake-kebab-0.4.0.jar\"]} [camel-snake-kebab \"0.4.0\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x2dd5c230 \"camel-snake-kebab:camel-snake-kebab:jar:0.4.0 (compile)\"], :file #object[java.io.File 0x7e3b9055 \"/home/andreas/.m2/repository/camel-snake-kebab/camel-snake-kebab/0.4.0/camel-snake-kebab-0.4.0.jar\"]} [camel-snake-kebab \"0.4.0\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/tools.analyzer"],"^;","org.clojure/tools.analyzer"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.6.9\""],"^;","\"0.6.9\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1a93b975 \"org.clojure:tools.analyzer:jar:0.6.9 (compile)\"], :file #object[java.io.File 0x6283f4ee \"/home/andreas/.m2/repository/org/clojure/tools.analyzer/0.6.9/tools.analyzer-0.6.9.jar\"]} [org.clojure/tools.analyzer \"0.6.9\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1a93b975 \"org.clojure:tools.analyzer:jar:0.6.9 (compile)\"], :file #object[java.io.File 0x6283f4ee \"/home/andreas/.m2/repository/org/clojure/tools.analyzer/0.6.9/tools.analyzer-0.6.9.jar\"]} [org.clojure/tools.analyzer \"0.6.9\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/tools.reader"],"^;","org.clojure/tools.reader"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"1.0.0-beta4\""],"^;","\"1.0.0-beta4\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1b5d3846 \"org.clojure:tools.reader:jar:1.0.0-beta4 (compile)\"], :file #object[java.io.File 0x6b2d1e2d \"/home/andreas/.m2/repository/org/clojure/tools.reader/1.0.0-beta4/tools.reader-1.0.0-beta4.jar\"]} [org.clojure/tools.reader \"1.0.0-beta4\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1b5d3846 \"org.clojure:tools.reader:jar:1.0.0-beta4 (compile)\"], :file #object[java.io.File 0x6b2d1e2d \"/home/andreas/.m2/repository/org/clojure/tools.reader/1.0.0-beta4/tools.reader-1.0.0-beta4.jar\"]} [org.clojure/tools.reader \"1.0.0-beta4\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"techascent/tech.parallel"],"^;","techascent/tech.parallel"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"1.7\""],"^;","\"1.7\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6c724a2c \"techascent:tech.parallel:jar:1.7 (compile)\"], :file #object[java.io.File 0x112bf7c8 \"/home/andreas/.m2/repository/techascent/tech.parallel/1.7/tech.parallel-1.7.jar\"]} [techascent/tech.parallel \"1.7\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6c724a2c \"techascent:tech.parallel:jar:1.7 (compile)\"], :file #object[java.io.File 0x112bf7c8 \"/home/andreas/.m2/repository/techascent/tech.parallel/1.7/tech.parallel-1.7.jar\"]} [techascent/tech.parallel \"1.7\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"net.java.dev.jna/jna"],"^;","net.java.dev.jna/jna"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"5.2.0\""],"^;","\"5.2.0\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x634672a3 \"net.java.dev.jna:jna:jar:5.2.0 (compile)\"], :file #object[java.io.File 0x6019d490 \"/home/andreas/.m2/repository/net/java/dev/jna/jna/5.2.0/jna-5.2.0.jar\"]} [net.java.dev.jna/jna \"5.2.0\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x634672a3 \"net.java.dev.jna:jna:jar:5.2.0 (compile)\"], :file #object[java.io.File 0x6019d490 \"/home/andreas/.m2/repository/net/java/dev/jna/jna/5.2.0/jna-5.2.0.jar\"]} [net.java.dev.jna/jna \"5.2.0\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"it.unimi.dsi/fastutil"],"^;","it.unimi.dsi/fastutil"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"8.2.1\""],"^;","\"8.2.1\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1e44c195 \"it.unimi.dsi:fastutil:jar:8.2.1 (compile)\"], :file #object[java.io.File 0x501ff022 \"/home/andreas/.m2/repository/it/unimi/dsi/fastutil/8.2.1/fastutil-8.2.1.jar\"]} [it.unimi.dsi/fastutil \"8.2.1\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1e44c195 \"it.unimi.dsi:fastutil:jar:8.2.1 (compile)\"], :file #object[java.io.File 0x501ff022 \"/home/andreas/.m2/repository/it/unimi/dsi/fastutil/8.2.1/fastutil-8.2.1.jar\"]} [it.unimi.dsi/fastutil \"8.2.1\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/math.combinatorics"],"^;","org.clojure/math.combinatorics"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.1.4\""],"^;","\"0.1.4\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x9c43e8 \"org.clojure:math.combinatorics:jar:0.1.4 (compile)\"], :file #object[java.io.File 0x2e0faa3f \"/home/andreas/.m2/repository/org/clojure/math.combinatorics/0.1.4/math.combinatorics-0.1.4.jar\"]} [org.clojure/math.combinatorics \"0.1.4\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x9c43e8 \"org.clojure:math.combinatorics:jar:0.1.4 (compile)\"], :file #object[java.io.File 0x2e0faa3f \"/home/andreas/.m2/repository/org/clojure/math.combinatorics/0.1.4/math.combinatorics-0.1.4.jar\"]} [org.clojure/math.combinatorics \"0.1.4\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/test.check"],"^;","org.clojure/test.check"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.9.0\""],"^;","\"0.9.0\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x16ff8e02 \"org.clojure:test.check:jar:0.9.0 (compile)\"], :file #object[java.io.File 0x39cee21f \"/home/andreas/.m2/repository/org/clojure/test.check/0.9.0/test.check-0.9.0.jar\"]} [org.clojure/test.check \"0.9.0\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x16ff8e02 \"org.clojure:test.check:jar:0.9.0 (compile)\"], :file #object[java.io.File 0x39cee21f \"/home/andreas/.m2/repository/org/clojure/test.check/0.9.0/test.check-0.9.0.jar\"]} [org.clojure/test.check \"0.9.0\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"techascent/tech.resource"],"^;","techascent/tech.resource"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"4.5\""],"^;","\"4.5\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x5baf65cd \"techascent:tech.resource:jar:4.5 (compile)\"], :file #object[java.io.File 0x8a272d5 \"/home/andreas/.m2/repository/techascent/tech.resource/4.5/tech.resource-4.5.jar\"]} [techascent/tech.resource \"4.5\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x5baf65cd \"techascent:tech.resource:jar:4.5 (compile)\"], :file #object[java.io.File 0x8a272d5 \"/home/andreas/.m2/repository/techascent/tech.resource/4.5/tech.resource-4.5.jar\"]} [techascent/tech.resource \"4.5\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/core.cache"],"^;","org.clojure/core.cache"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.7.1\""],"^;","\"0.7.1\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x40597231 \"org.clojure:core.cache:jar:0.7.1 (compile)\"], :file #object[java.io.File 0x2879431e \"/home/andreas/.m2/repository/org/clojure/core.cache/0.7.1/core.cache-0.7.1.jar\"]} [org.clojure/core.cache \"0.7.1\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x40597231 \"org.clojure:core.cache:jar:0.7.1 (compile)\"], :file #object[java.io.File 0x2879431e \"/home/andreas/.m2/repository/org/clojure/core.cache/0.7.1/core.cache-0.7.1.jar\"]} [org.clojure/core.cache \"0.7.1\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/tools.logging"],"^;","org.clojure/tools.logging"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.4.1\""],"^;","\"0.4.1\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6247725d \"org.clojure:tools.logging:jar:0.4.1 (compile)\"], :file #object[java.io.File 0x2cd7aa10 \"/home/andreas/.m2/repository/org/clojure/tools.logging/0.4.1/tools.logging-0.4.1.jar\"]} [org.clojure/tools.logging \"0.4.1\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6247725d \"org.clojure:tools.logging:jar:0.4.1 (compile)\"], :file #object[java.io.File 0x2cd7aa10 \"/home/andreas/.m2/repository/org/clojure/tools.logging/0.4.1/tools.logging-0.4.1.jar\"]} [org.clojure/tools.logging \"0.4.1\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.ow2.asm/asm-all"],"^;","org.ow2.asm/asm-all"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"4.2\""],"^;","\"4.2\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0xcf6334a \"org.ow2.asm:asm-all:jar:4.2 (compile)\"], :file #object[java.io.File 0x1759dcdb \"/home/andreas/.m2/repository/org/ow2/asm/asm-all/4.2/asm-all-4.2.jar\"]} [org.ow2.asm/asm-all \"4.2\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0xcf6334a \"org.ow2.asm:asm-all:jar:4.2 (compile)\"], :file #object[java.io.File 0x1759dcdb \"/home/andreas/.m2/repository/org/ow2/asm/asm-all/4.2/asm-all-4.2.jar\"]} [org.ow2.asm/asm-all \"4.2\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/data.priority-map"],"^;","org.clojure/data.priority-map"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.0.7\""],"^;","\"0.0.7\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x4e5581f7 \"org.clojure:data.priority-map:jar:0.0.7 (compile)\"], :file #object[java.io.File 0x5fc32507 \"/home/andreas/.m2/repository/org/clojure/data.priority-map/0.0.7/data.priority-map-0.0.7.jar\"]} [org.clojure/data.priority-map \"0.0.7\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x4e5581f7 \"org.clojure:data.priority-map:jar:0.0.7 (compile)\"], :file #object[java.io.File 0x5fc32507 \"/home/andreas/.m2/repository/org/clojure/data.priority-map/0.0.7/data.priority-map-0.0.7.jar\"]} [org.clojure/data.priority-map \"0.0.7\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"techascent/tech.datatype"],"^;","techascent/tech.datatype"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"4.0\""],"^;","\"4.0\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x33969a21 \"techascent:tech.datatype:jar:4.0 (compile)\"], :file #object[java.io.File 0x3c74918 \"/home/andreas/.m2/repository/techascent/tech.datatype/4.0/tech.datatype-4.0.jar\"]} [techascent/tech.datatype \"4.0\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-set"],"#{"],"^5",["^3",["^ ","^4","clj-set"],"}"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.apache.commons/commons-math3"],"^;","org.apache.commons/commons-math3"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"3.6.1\""],"^;","\"3.6.1\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6e1813f \"org.apache.commons:commons-math3:jar:3.6.1 (compile)\"], :file #object[java.io.File 0x5c6c333b \"/home/andreas/.m2/repository/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar\"]} [org.apache.commons/commons-math3 \"3.6.1\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"com.tdunning/t-digest"],"^;","com.tdunning/t-digest"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"3.2\""],"^;","\"3.2\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x57af1a7d \"com.tdunning:t-digest:jar:3.2 (compile)\"], :file #object[java.io.File 0x352cd225 \"/home/andreas/.m2/repository/com/tdunning/t-digest/3.2/t-digest-3.2.jar\"]} [com.tdunning/t-digest \"3.2\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"techascent/tech.jna"],"^;","techascent/tech.jna"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"3.18\""],"^;","\"3.18\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x255b9f9f \"techascent:tech.jna:jar:3.18 (compile)\"], :file #object[java.io.File 0x1ced8da5 \"/home/andreas/.m2/repository/techascent/tech.jna/3.18/tech.jna-3.18.jar\"]} [techascent/tech.jna \"3.18\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/tools.analyzer"],"^;","org.clojure/tools.analyzer"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.6.9\""],"^;","\"0.6.9\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1a93b975 \"org.clojure:tools.analyzer:jar:0.6.9 (compile)\"], :file #object[java.io.File 0x6283f4ee \"/home/andreas/.m2/repository/org/clojure/tools.analyzer/0.6.9/tools.analyzer-0.6.9.jar\"]} [org.clojure/tools.analyzer \"0.6.9\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/tools.reader"],"^;","org.clojure/tools.reader"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"1.0.0-beta4\""],"^;","\"1.0.0-beta4\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1b5d3846 \"org.clojure:tools.reader:jar:1.0.0-beta4 (compile)\"], :file #object[java.io.File 0x6b2d1e2d \"/home/andreas/.m2/repository/org/clojure/tools.reader/1.0.0-beta4/tools.reader-1.0.0-beta4.jar\"]} [org.clojure/tools.reader \"1.0.0-beta4\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"techascent/tech.parallel"],"^;","techascent/tech.parallel"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"1.7\""],"^;","\"1.7\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6c724a2c \"techascent:tech.parallel:jar:1.7 (compile)\"], :file #object[java.io.File 0x112bf7c8 \"/home/andreas/.m2/repository/techascent/tech.parallel/1.7/tech.parallel-1.7.jar\"]} [techascent/tech.parallel \"1.7\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"net.java.dev.jna/jna"],"^;","net.java.dev.jna/jna"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"5.2.0\""],"^;","\"5.2.0\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x634672a3 \"net.java.dev.jna:jna:jar:5.2.0 (compile)\"], :file #object[java.io.File 0x6019d490 \"/home/andreas/.m2/repository/net/java/dev/jna/jna/5.2.0/jna-5.2.0.jar\"]} [net.java.dev.jna/jna \"5.2.0\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"it.unimi.dsi/fastutil"],"^;","it.unimi.dsi/fastutil"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"8.2.1\""],"^;","\"8.2.1\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1e44c195 \"it.unimi.dsi:fastutil:jar:8.2.1 (compile)\"], :file #object[java.io.File 0x501ff022 \"/home/andreas/.m2/repository/it/unimi/dsi/fastutil/8.2.1/fastutil-8.2.1.jar\"]} [it.unimi.dsi/fastutil \"8.2.1\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/math.combinatorics"],"^;","org.clojure/math.combinatorics"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.1.4\""],"^;","\"0.1.4\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x9c43e8 \"org.clojure:math.combinatorics:jar:0.1.4 (compile)\"], :file #object[java.io.File 0x2e0faa3f \"/home/andreas/.m2/repository/org/clojure/math.combinatorics/0.1.4/math.combinatorics-0.1.4.jar\"]} [org.clojure/math.combinatorics \"0.1.4\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/test.check"],"^;","org.clojure/test.check"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.9.0\""],"^;","\"0.9.0\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x16ff8e02 \"org.clojure:test.check:jar:0.9.0 (compile)\"], :file #object[java.io.File 0x39cee21f \"/home/andreas/.m2/repository/org/clojure/test.check/0.9.0/test.check-0.9.0.jar\"]} [org.clojure/test.check \"0.9.0\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"techascent/tech.resource"],"^;","techascent/tech.resource"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"4.5\""],"^;","\"4.5\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x5baf65cd \"techascent:tech.resource:jar:4.5 (compile)\"], :file #object[java.io.File 0x8a272d5 \"/home/andreas/.m2/repository/techascent/tech.resource/4.5/tech.resource-4.5.jar\"]} [techascent/tech.resource \"4.5\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/tools.logging"],"^;","org.clojure/tools.logging"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.4.1\""],"^;","\"0.4.1\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6247725d \"org.clojure:tools.logging:jar:0.4.1 (compile)\"], :file #object[java.io.File 0x2cd7aa10 \"/home/andreas/.m2/repository/org/clojure/tools.logging/0.4.1/tools.logging-0.4.1.jar\"]} [org.clojure/tools.logging \"0.4.1\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.ow2.asm/asm-all"],"^;","org.ow2.asm/asm-all"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"4.2\""],"^;","\"4.2\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0xcf6334a \"org.ow2.asm:asm-all:jar:4.2 (compile)\"], :file #object[java.io.File 0x1759dcdb \"/home/andreas/.m2/repository/org/ow2/asm/asm-all/4.2/asm-all-4.2.jar\"]} [org.ow2.asm/asm-all \"4.2\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/data.priority-map"],"^;","org.clojure/data.priority-map"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.0.7\""],"^;","\"0.0.7\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x4e5581f7 \"org.clojure:data.priority-map:jar:0.0.7 (compile)\"], :file #object[java.io.File 0x5fc32507 \"/home/andreas/.m2/repository/org/clojure/data.priority-map/0.0.7/data.priority-map-0.0.7.jar\"]} [org.clojure/data.priority-map \"0.0.7\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"redux"],"^;","redux"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.1.3\""],"^;","\"0.1.3\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x621221d6 \"redux:redux:jar:0.1.3 (compile)\"], :file #object[java.io.File 0x3bf4864b \"/home/andreas/.m2/repository/redux/redux/0.1.3/redux-0.1.3.jar\"]} [redux \"0.1.3\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"kixi/stats"],"^;","kixi/stats"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.5.0\""],"^;","\"0.5.0\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x594cf2fb \"kixi:stats:jar:0.5.0 (compile)\"], :file #object[java.io.File 0x1fe10fc8 \"/home/andreas/.m2/repository/kixi/stats/0.5.0/stats-0.5.0.jar\"]} [kixi/stats \"0.5.0\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/core.async"],"^;","org.clojure/core.async"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.4.490\""],"^;","\"0.4.490\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6c8e8173 \"org.clojure:core.async:jar:0.4.490 (compile)\"], :file #object[java.io.File 0x73579477 \"/home/andreas/.m2/repository/org/clojure/core.async/0.4.490/core.async-0.4.490.jar\"]} [org.clojure/core.async \"0.4.490\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/tools.analyzer.jvm"],"^;","org.clojure/tools.analyzer.jvm"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.7.2\""],"^;","\"0.7.2\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x4db26bcc \"org.clojure:tools.analyzer.jvm:jar:0.7.2 (compile)\"], :file #object[java.io.File 0x5a3ab2fd \"/home/andreas/.m2/repository/org/clojure/tools.analyzer.jvm/0.7.2/tools.analyzer.jvm-0.7.2.jar\"]} [org.clojure/tools.analyzer.jvm \"0.7.2\"]"]]],"^;","#{^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6e1813f \"org.apache.commons:commons-math3:jar:3.6.1 (compile)\"], :file #object[java.io.File 0x5c6c333b \"/home/andreas/.m2/repository/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar\"]} [org.apache.commons/commons-math3 \"3.6.1\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x57af1a7d \"com.tdunning:t-digest:jar:3.2 (compile)\"], :file #object[java.io.File 0x352cd225 \"/home/andreas/.m2/repository/com/tdunning/t-digest/3.2/t-digest-3.2.jar\"]} [com.tdunning/t-digest \"3.2\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x255b9f9f \"techascent:tech.jna:jar:3.18 (compile)\"], :file #object[java.io.File 0x1ced8da5 \"/home/andreas/.m2/repository/techascent/tech.jna/3.18/tech.jna-3.18.jar\"]} [techascent/tech.jna \"3.18\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1a93b975 \"org.clojure:tools.analyzer:jar:0.6.9 (compile)\"], :file #object[java.io.File 0x6283f4ee \"/home/andreas/.m2/repository/org/clojure/tools.analyzer/0.6.9/tools.analyzer-0.6.9.jar\"]} [org.clojure/tools.analyzer \"0.6.9\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1b5d3846 \"org.clojure:tools.reader:jar:1.0.0-beta4 (compile)\"], :file #object[java.io.File 0x6b2d1e2d \"/home/andreas/.m2/repository/org/clojure/tools.reader/1.0.0-beta4/tools.reader-1.0.0-beta4.jar\"]} [org.clojure/tools.reader \"1.0.0-beta4\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6c724a2c \"techascent:tech.parallel:jar:1.7 (compile)\"], :file #object[java.io.File 0x112bf7c8 \"/home/andreas/.m2/repository/techascent/tech.parallel/1.7/tech.parallel-1.7.jar\"]} [techascent/tech.parallel \"1.7\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x634672a3 \"net.java.dev.jna:jna:jar:5.2.0 (compile)\"], :file #object[java.io.File 0x6019d490 \"/home/andreas/.m2/repository/net/java/dev/jna/jna/5.2.0/jna-5.2.0.jar\"]} [net.java.dev.jna/jna \"5.2.0\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1e44c195 \"it.unimi.dsi:fastutil:jar:8.2.1 (compile)\"], :file #object[java.io.File 0x501ff022 \"/home/andreas/.m2/repository/it/unimi/dsi/fastutil/8.2.1/fastutil-8.2.1.jar\"]} [it.unimi.dsi/fastutil \"8.2.1\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x9c43e8 \"org.clojure:math.combinatorics:jar:0.1.4 (compile)\"], :file #object[java.io.File 0x2e0faa3f \"/home/andreas/.m2/repository/org/clojure/math.combinatorics/0.1.4/math.combinatorics-0.1.4.jar\"]} [org.clojure/math.combinatorics \"0.1.4\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x16ff8e02 \"org.clojure:test.check:jar:0.9.0 (compile)\"], :file #object[java.io.File 0x39cee21f \"/home/andreas/.m2/repository/org/clojure/test.check/0.9.0/test.check-0.9.0.jar\"]} [org.clojure/test.check \"0.9.0\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x5baf65cd \"techascent:tech.resource:jar:4.5 (compile)\"], :file #object[java.io.File 0x8a272d5 \"/home/andreas/.m2/repository/techascent/tech.resource/4.5/tech.resource-4.5.jar\"]} [techascent/tech.resource \"4.5\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6247725d \"org.clojure:tools.logging:jar:0.4.1 (compile)\"], :file #object[java.io.File 0x2cd7aa10 \"/home/andreas/.m2/repository/org/clojure/tools.logging/0.4.1/tools.logging-0.4.1.jar\"]} [org.clojure/tools.logging \"0.4.1\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0xcf6334a \"org.ow2.asm:asm-all:jar:4.2 (compile)\"], :file #object[java.io.File 0x1759dcdb \"/home/andreas/.m2/repository/org/ow2/asm/asm-all/4.2/asm-all-4.2.jar\"]} [org.ow2.asm/asm-all \"4.2\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x4e5581f7 \"org.clojure:data.priority-map:jar:0.0.7 (compile)\"], :file #object[java.io.File 0x5fc32507 \"/home/andreas/.m2/repository/org/clojure/data.priority-map/0.0.7/data.priority-map-0.0.7.jar\"]} [org.clojure/data.priority-map \"0.0.7\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x621221d6 \"redux:redux:jar:0.1.3 (compile)\"], :file #object[java.io.File 0x3bf4864b \"/home/andreas/.m2/repository/redux/redux/0.1.3/redux-0.1.3.jar\"]} [redux \"0.1.3\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x594cf2fb \"kixi:stats:jar:0.5.0 (compile)\"], :file #object[java.io.File 0x1fe10fc8 \"/home/andreas/.m2/repository/kixi/stats/0.5.0/stats-0.5.0.jar\"]} [kixi/stats \"0.5.0\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6c8e8173 \"org.clojure:core.async:jar:0.4.490 (compile)\"], :file #object[java.io.File 0x73579477 \"/home/andreas/.m2/repository/org/clojure/core.async/0.4.490/core.async-0.4.490.jar\"]} [org.clojure/core.async \"0.4.490\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x4db26bcc \"org.clojure:tools.analyzer.jvm:jar:0.7.2 (compile)\"], :file #object[java.io.File 0x5a3ab2fd \"/home/andreas/.m2/repository/org/clojure/tools.analyzer.jvm/0.7.2/tools.analyzer.jvm-0.7.2.jar\"]} [org.clojure/tools.analyzer.jvm \"0.7.2\"]}"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x33969a21 \"techascent:tech.datatype:jar:4.0 (compile)\"], :file #object[java.io.File 0x3c74918 \"/home/andreas/.m2/repository/techascent/tech.datatype/4.0/tech.datatype-4.0.jar\"]} [techascent/tech.datatype \"4.0\"] #{^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6e1813f \"org.apache.commons:commons-math3:jar:3.6.1 (compile)\"], :file #object[java.io.File 0x5c6c333b \"/home/andreas/.m2/repository/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar\"]} [org.apache.commons/commons-math3 \"3.6.1\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x57af1a7d \"com.tdunning:t-digest:jar:3.2 (compile)\"], :file #object[java.io.File 0x352cd225 \"/home/andreas/.m2/repository/com/tdunning/t-digest/3.2/t-digest-3.2.jar\"]} [com.tdunning/t-digest \"3.2\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x255b9f9f \"techascent:tech.jna:jar:3.18 (compile)\"], :file #object[java.io.File 0x1ced8da5 \"/home/andreas/.m2/repository/techascent/tech.jna/3.18/tech.jna-3.18.jar\"]} [techascent/tech.jna \"3.18\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1a93b975 \"org.clojure:tools.analyzer:jar:0.6.9 (compile)\"], :file #object[java.io.File 0x6283f4ee \"/home/andreas/.m2/repository/org/clojure/tools.analyzer/0.6.9/tools.analyzer-0.6.9.jar\"]} [org.clojure/tools.analyzer \"0.6.9\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1b5d3846 \"org.clojure:tools.reader:jar:1.0.0-beta4 (compile)\"], :file #object[java.io.File 0x6b2d1e2d \"/home/andreas/.m2/repository/org/clojure/tools.reader/1.0.0-beta4/tools.reader-1.0.0-beta4.jar\"]} [org.clojure/tools.reader \"1.0.0-beta4\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6c724a2c \"techascent:tech.parallel:jar:1.7 (compile)\"], :file #object[java.io.File 0x112bf7c8 \"/home/andreas/.m2/repository/techascent/tech.parallel/1.7/tech.parallel-1.7.jar\"]} [techascent/tech.parallel \"1.7\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x634672a3 \"net.java.dev.jna:jna:jar:5.2.0 (compile)\"], :file #object[java.io.File 0x6019d490 \"/home/andreas/.m2/repository/net/java/dev/jna/jna/5.2.0/jna-5.2.0.jar\"]} [net.java.dev.jna/jna \"5.2.0\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x1e44c195 \"it.unimi.dsi:fastutil:jar:8.2.1 (compile)\"], :file #object[java.io.File 0x501ff022 \"/home/andreas/.m2/repository/it/unimi/dsi/fastutil/8.2.1/fastutil-8.2.1.jar\"]} [it.unimi.dsi/fastutil \"8.2.1\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x9c43e8 \"org.clojure:math.combinatorics:jar:0.1.4 (compile)\"], :file #object[java.io.File 0x2e0faa3f \"/home/andreas/.m2/repository/org/clojure/math.combinatorics/0.1.4/math.combinatorics-0.1.4.jar\"]} [org.clojure/math.combinatorics \"0.1.4\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x16ff8e02 \"org.clojure:test.check:jar:0.9.0 (compile)\"], :file #object[java.io.File 0x39cee21f \"/home/andreas/.m2/repository/org/clojure/test.check/0.9.0/test.check-0.9.0.jar\"]} [org.clojure/test.check \"0.9.0\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x5baf65cd \"techascent:tech.resource:jar:4.5 (compile)\"], :file #object[java.io.File 0x8a272d5 \"/home/andreas/.m2/repository/techascent/tech.resource/4.5/tech.resource-4.5.jar\"]} [techascent/tech.resource \"4.5\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6247725d \"org.clojure:tools.logging:jar:0.4.1 (compile)\"], :file #object[java.io.File 0x2cd7aa10 \"/home/andreas/.m2/repository/org/clojure/tools.logging/0.4.1/tools.logging-0.4.1.jar\"]} [org.clojure/tools.logging \"0.4.1\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0xcf6334a \"org.ow2.asm:asm-all:jar:4.2 (compile)\"], :file #object[java.io.File 0x1759dcdb \"/home/andreas/.m2/repository/org/ow2/asm/asm-all/4.2/asm-all-4.2.jar\"]} [org.ow2.asm/asm-all \"4.2\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x4e5581f7 \"org.clojure:data.priority-map:jar:0.0.7 (compile)\"], :file #object[java.io.File 0x5fc32507 \"/home/andreas/.m2/repository/org/clojure/data.priority-map/0.0.7/data.priority-map-0.0.7.jar\"]} [org.clojure/data.priority-map \"0.0.7\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x621221d6 \"redux:redux:jar:0.1.3 (compile)\"], :file #object[java.io.File 0x3bf4864b \"/home/andreas/.m2/repository/redux/redux/0.1.3/redux-0.1.3.jar\"]} [redux \"0.1.3\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x594cf2fb \"kixi:stats:jar:0.5.0 (compile)\"], :file #object[java.io.File 0x1fe10fc8 \"/home/andreas/.m2/repository/kixi/stats/0.5.0/stats-0.5.0.jar\"]} [kixi/stats \"0.5.0\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6c8e8173 \"org.clojure:core.async:jar:0.4.490 (compile)\"], :file #object[java.io.File 0x73579477 \"/home/andreas/.m2/repository/org/clojure/core.async/0.4.490/core.async-0.4.490.jar\"]} [org.clojure/core.async \"0.4.490\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x4db26bcc \"org.clojure:tools.analyzer.jvm:jar:0.7.2 (compile)\"], :file #object[java.io.File 0x5a3ab2fd \"/home/andreas/.m2/repository/org/clojure/tools.analyzer.jvm/0.7.2/tools.analyzer.jvm-0.7.2.jar\"]} [org.clojure/tools.analyzer.jvm \"0.7.2\"]}]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/clojure"],"^;","org.clojure/clojure"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"1.10.1\""],"^;","\"1.10.1\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0xcf12 \"org.clojure:clojure:jar:1.10.1 (compile)\"], :file #object[java.io.File 0x229b4e7f \"/home/andreas/.m2/repository/org/clojure/clojure/1.10.1/clojure-1.10.1.jar\"]} [org.clojure/clojure \"1.10.1\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-set"],"#{"],"^5",["^3",["^ ","^4","clj-set"],"}"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/core.specs.alpha"],"^;","org.clojure/core.specs.alpha"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.2.44\""],"^;","\"0.2.44\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x42a725d0 \"org.clojure:core.specs.alpha:jar:0.2.44 (compile)\"], :file #object[java.io.File 0xd9cf5df \"/home/andreas/.m2/repository/org/clojure/core.specs.alpha/0.2.44/core.specs.alpha-0.2.44.jar\"]} [org.clojure/core.specs.alpha \"0.2.44\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/spec.alpha"],"^;","org.clojure/spec.alpha"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.2.176\""],"^;","\"0.2.176\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x53ae03ab \"org.clojure:spec.alpha:jar:0.2.176 (compile)\"], :file #object[java.io.File 0x5c8cfe79 \"/home/andreas/.m2/repository/org/clojure/spec.alpha/0.2.176/spec.alpha-0.2.176.jar\"]} [org.clojure/spec.alpha \"0.2.176\"]"]]],"^;","#{^{:dependency #object[org.eclipse.aether.graph.Dependency 0x42a725d0 \"org.clojure:core.specs.alpha:jar:0.2.44 (compile)\"], :file #object[java.io.File 0xd9cf5df \"/home/andreas/.m2/repository/org/clojure/core.specs.alpha/0.2.44/core.specs.alpha-0.2.44.jar\"]} [org.clojure/core.specs.alpha \"0.2.44\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x53ae03ab \"org.clojure:spec.alpha:jar:0.2.176 (compile)\"], :file #object[java.io.File 0x5c8cfe79 \"/home/andreas/.m2/repository/org/clojure/spec.alpha/0.2.176/spec.alpha-0.2.176.jar\"]} [org.clojure/spec.alpha \"0.2.176\"]}"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0xcf12 \"org.clojure:clojure:jar:1.10.1 (compile)\"], :file #object[java.io.File 0x229b4e7f \"/home/andreas/.m2/repository/org/clojure/clojure/1.10.1/clojure-1.10.1.jar\"]} [org.clojure/clojure \"1.10.1\"] #{^{:dependency #object[org.eclipse.aether.graph.Dependency 0x42a725d0 \"org.clojure:core.specs.alpha:jar:0.2.44 (compile)\"], :file #object[java.io.File 0xd9cf5df \"/home/andreas/.m2/repository/org/clojure/core.specs.alpha/0.2.44/core.specs.alpha-0.2.44.jar\"]} [org.clojure/core.specs.alpha \"0.2.44\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x53ae03ab \"org.clojure:spec.alpha:jar:0.2.176 (compile)\"], :file #object[java.io.File 0x5c8cfe79 \"/home/andreas/.m2/repository/org/clojure/spec.alpha/0.2.176/spec.alpha-0.2.176.jar\"]} [org.clojure/spec.alpha \"0.2.176\"]}]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"panthera"],"^;","panthera"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.1-alpha.13\""],"^;","\"0.1-alpha.13\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x277ec99d \"panthera:panthera:jar:0.1-alpha.13 (compile)\"], :file #object[java.io.File 0x4d26e2a0 \"/home/andreas/.m2/repository/panthera/panthera/0.1-alpha.13/panthera-0.1-alpha.13.jar\"]} [panthera \"0.1-alpha.13\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-set"],"#{"],"^5",["^3",["^ ","^4","clj-set"],"}"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/core.memoize"],"^;","org.clojure/core.memoize"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.7.2\""],"^;","\"0.7.2\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6e7809df \"org.clojure:core.memoize:jar:0.7.2 (compile)\"], :file #object[java.io.File 0xa3a1dad \"/home/andreas/.m2/repository/org/clojure/core.memoize/0.7.2/core.memoize-0.7.2.jar\"]} [org.clojure/core.memoize \"0.7.2\"]"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"cnuernber/libpython-clj"],"^;","cnuernber/libpython-clj"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"1.0\""],"^;","\"1.0\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x3f4e45c6 \"cnuernber:libpython-clj:jar:1.0 (compile)\"], :file #object[java.io.File 0x2064cff \"/home/andreas/.m2/repository/cnuernber/libpython-clj/1.0/libpython-clj-1.0.jar\"]} [cnuernber/libpython-clj \"1.0\"]"]]],"^;","#{^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6e7809df \"org.clojure:core.memoize:jar:0.7.2 (compile)\"], :file #object[java.io.File 0xa3a1dad \"/home/andreas/.m2/repository/org/clojure/core.memoize/0.7.2/core.memoize-0.7.2.jar\"]} [org.clojure/core.memoize \"0.7.2\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x3f4e45c6 \"cnuernber:libpython-clj:jar:1.0 (compile)\"], :file #object[java.io.File 0x2064cff \"/home/andreas/.m2/repository/cnuernber/libpython-clj/1.0/libpython-clj-1.0.jar\"]} [cnuernber/libpython-clj \"1.0\"]}"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x277ec99d \"panthera:panthera:jar:0.1-alpha.13 (compile)\"], :file #object[java.io.File 0x4d26e2a0 \"/home/andreas/.m2/repository/panthera/panthera/0.1-alpha.13/panthera-0.1-alpha.13.jar\"]} [panthera \"0.1-alpha.13\"] #{^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6e7809df \"org.clojure:core.memoize:jar:0.7.2 (compile)\"], :file #object[java.io.File 0xa3a1dad \"/home/andreas/.m2/repository/org/clojure/core.memoize/0.7.2/core.memoize-0.7.2.jar\"]} [org.clojure/core.memoize \"0.7.2\"] ^{:dependency #object[org.eclipse.aether.graph.Dependency 0x3f4e45c6 \"cnuernber:libpython-clj:jar:1.0 (compile)\"], :file #object[java.io.File 0x2064cff \"/home/andreas/.m2/repository/cnuernber/libpython-clj/1.0/libpython-clj-1.0.jar\"]} [cnuernber/libpython-clj \"1.0\"]}]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"redux"],"^;","redux"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.1.3\""],"^;","\"0.1.3\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x621221d6 \"redux:redux:jar:0.1.3 (compile)\"], :file #object[java.io.File 0x3bf4864b \"/home/andreas/.m2/repository/redux/redux/0.1.3/redux-0.1.3.jar\"]} [redux \"0.1.3\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x621221d6 \"redux:redux:jar:0.1.3 (compile)\"], :file #object[java.io.File 0x3bf4864b \"/home/andreas/.m2/repository/redux/redux/0.1.3/redux-0.1.3.jar\"]} [redux \"0.1.3\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/core.specs.alpha"],"^;","org.clojure/core.specs.alpha"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.2.44\""],"^;","\"0.2.44\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x42a725d0 \"org.clojure:core.specs.alpha:jar:0.2.44 (compile)\"], :file #object[java.io.File 0xd9cf5df \"/home/andreas/.m2/repository/org/clojure/core.specs.alpha/0.2.44/core.specs.alpha-0.2.44.jar\"]} [org.clojure/core.specs.alpha \"0.2.44\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x42a725d0 \"org.clojure:core.specs.alpha:jar:0.2.44 (compile)\"], :file #object[java.io.File 0xd9cf5df \"/home/andreas/.m2/repository/org/clojure/core.specs.alpha/0.2.44/core.specs.alpha-0.2.44.jar\"]} [org.clojure/core.specs.alpha \"0.2.44\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"kixi/stats"],"^;","kixi/stats"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.5.0\""],"^;","\"0.5.0\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x594cf2fb \"kixi:stats:jar:0.5.0 (compile)\"], :file #object[java.io.File 0x1fe10fc8 \"/home/andreas/.m2/repository/kixi/stats/0.5.0/stats-0.5.0.jar\"]} [kixi/stats \"0.5.0\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x594cf2fb \"kixi:stats:jar:0.5.0 (compile)\"], :file #object[java.io.File 0x1fe10fc8 \"/home/andreas/.m2/repository/kixi/stats/0.5.0/stats-0.5.0.jar\"]} [kixi/stats \"0.5.0\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/core.async"],"^;","org.clojure/core.async"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.4.490\""],"^;","\"0.4.490\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6c8e8173 \"org.clojure:core.async:jar:0.4.490 (compile)\"], :file #object[java.io.File 0x73579477 \"/home/andreas/.m2/repository/org/clojure/core.async/0.4.490/core.async-0.4.490.jar\"]} [org.clojure/core.async \"0.4.490\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x6c8e8173 \"org.clojure:core.async:jar:0.4.490 (compile)\"], :file #object[java.io.File 0x73579477 \"/home/andreas/.m2/repository/org/clojure/core.async/0.4.490/core.async-0.4.490.jar\"]} [org.clojure/core.async \"0.4.490\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/spec.alpha"],"^;","org.clojure/spec.alpha"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.2.176\""],"^;","\"0.2.176\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x53ae03ab \"org.clojure:spec.alpha:jar:0.2.176 (compile)\"], :file #object[java.io.File 0x5c8cfe79 \"/home/andreas/.m2/repository/org/clojure/spec.alpha/0.2.176/spec.alpha-0.2.176.jar\"]} [org.clojure/spec.alpha \"0.2.176\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x53ae03ab \"org.clojure:spec.alpha:jar:0.2.176 (compile)\"], :file #object[java.io.File 0x5c8cfe79 \"/home/andreas/.m2/repository/org/clojure/spec.alpha/0.2.176/spec.alpha-0.2.176.jar\"]} [org.clojure/spec.alpha \"0.2.176\"] nil]"],["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-vector"],"["],"^5",["^3",["^ ","^4","clj-vector"],"]"],"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-symbol"],"org.clojure/tools.analyzer.jvm"],"^;","org.clojure/tools.analyzer.jvm"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"0.7.2\""],"^;","\"0.7.2\""]]],"^;","~^{:dependency #object[org.eclipse.aether.graph.Dependency 0x4db26bcc \"org.clojure:tools.analyzer.jvm:jar:0.7.2 (compile)\"], :file #object[java.io.File 0x5a3ab2fd \"/home/andreas/.m2/repository/org/clojure/tools.analyzer.jvm/0.7.2/tools.analyzer.jvm-0.7.2.jar\"]} [org.clojure/tools.analyzer.jvm \"0.7.2\"]"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-nil"],"nil"],"^;","nil"]]],"^;","[^{:dependency #object[org.eclipse.aether.graph.Dependency 0x4db26bcc \"org.clojure:tools.analyzer.jvm:jar:0.7.2 (compile)\"], :file #object[java.io.File 0x5a3ab2fd \"/home/andreas/.m2/repository/org/clojure/tools.analyzer.jvm/0.7.2/tools.analyzer.jvm-0.7.2.jar\"]} [org.clojure/tools.analyzer.jvm \"0.7.2\"] nil]"]]],"^;","{[org.clojure/core.memoize \"0.7.2\"] #{[org.clojure/core.cache \"0.7.1\"]}, [org.apache.commons/commons-math3 \"3.6.1\"] nil, [com.tdunning/t-digest \"3.2\"] nil, [cnuernber/libpython-clj \"1.0\"] #{[camel-snake-kebab \"0.4.0\"] [techascent/tech.datatype \"4.0\"] [org.clojure/clojure \"1.10.1\"]}, [techascent/tech.jna \"3.18\"] nil, [camel-snake-kebab \"0.4.0\"] nil, [org.clojure/tools.analyzer \"0.6.9\"] nil, [org.clojure/tools.reader \"1.0.0-beta4\"] nil, [techascent/tech.parallel \"1.7\"] nil, [net.java.dev.jna/jna \"5.2.0\"] nil, [it.unimi.dsi/fastutil \"8.2.1\"] nil, [org.clojure/math.combinatorics \"0.1.4\"] nil, [org.clojure/test.check \"0.9.0\"] nil, [techascent/tech.resource \"4.5\"] nil, [org.clojure/core.cache \"0.7.1\"] nil, [org.clojure/tools.logging \"0.4.1\"] nil, [org.ow2.asm/asm-all \"4.2\"] nil, [org.clojure/data.priority-map \"0.0.7\"] nil, [techascent/tech.datatype \"4.0\"] #{[org.apache.commons/commons-math3 \"3.6.1\"] [com.tdunning/t-digest \"3.2\"] [techascent/tech.jna \"3.18\"] [org.clojure/tools.analyzer \"0.6.9\"] [org.clojure/tools.reader \"1.0.0-beta4\"] [techascent/tech.parallel \"1.7\"] [net.java.dev.jna/jna \"5.2.0\"] [it.unimi.dsi/fastutil \"8.2.1\"] [org.clojure/math.combinatorics \"0.1.4\"] [org.clojure/test.check \"0.9.0\"] [techascent/tech.resource \"4.5\"] [org.clojure/tools.logging \"0.4.1\"] [org.ow2.asm/asm-all \"4.2\"] [org.clojure/data.priority-map \"0.0.7\"] [redux \"0.1.3\"] [kixi/stats \"0.5.0\"] [org.clojure/core.async \"0.4.490\"] [org.clojure/tools.analyzer.jvm \"0.7.2\"]}, [org.clojure/clojure \"1.10.1\"] #{[org.clojure/core.specs.alpha \"0.2.44\"] [org.clojure/spec.alpha \"0.2.176\"]}, [panthera \"0.1-alpha.13\"] #{[org.clojure/core.memoize \"0.7.2\"] [cnuernber/libpython-clj \"1.0\"]}, [redux \"0.1.3\"] nil, [org.clojure/core.specs.alpha \"0.2.44\"] nil, [kixi/stats \"0.5.0\"] nil, [org.clojure/core.async \"0.4.490\"] nil, [org.clojure/spec.alpha \"0.2.176\"] nil, [org.clojure/tools.analyzer.jvm \"0.7.2\"] nil}"]
+;; <=
+
+;; @@ [clj]
+(require '[panthera.panthera :as pt])
+(require '[libpython-clj.python :as py])
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-nil"],"nil"],"~:value","nil"]
+;; <=
+
+;; **
+;;; The `show` function is a helper to render data-frames
+;; **
+
+;; @@ [clj]
+(defn show
+  [obj]
+   ^:R [:p/phtml
+    (py/call-attr obj "to_html")])
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-var"],"#'user/show"],"~:value","#'user/show"]
+;; <=
+
+;; **
+;;; ## Series
+;;; 
+;;; *Serieses* are like vectors that act also as columns for *data-frames* (see [Data-frame](#dataframe) section). One *series* must have all the contained data with the same data type and if there is more than one type when you create a *series* than this one takes the most relaxed one.
+;;; 
+;;; ### Create
+;; **
+
+;; @@ [clj]
+(pt/series [1 2 3])
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0    1\n1    2\n2    3\ndtype: int64"],"~:value","0    1\n1    2\n2    3\ndtype: int64"]
+;; <=
+
+;; **
+;;; If we print the *series* we see on the left its index and on the right its values. As you can see below the *series* itself we get the underlying data type (*dtype*) as well. Let's swap 3 with "a" and see what happens.
+;; **
+
+;; @@ [clj]
+(pt/series [1 2 "a"])
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0    1\n1    2\n2    a\ndtype: object"],"~:value","0    1\n1    2\n2    a\ndtype: object"]
+;; <=
+
+;; **
+;;; Now the *dtype* it's become `object`, which in *panthera* means either `string` or something that can be represented with a `string` and is not a primitive.
+;;; 
+;;; If we get this data back to Clojure we'll see that we get the underlying original representation with mixed data types.
+;; **
+
+;; @@ [clj]
+(vec (pt/series [1 2 "a"]))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:list-like","~:open",["~:span",["^ ","~:class","clj-vector"],"["],"~:close",["^3",["^ ","^4","clj-vector"],"]"],"~:separator",["^3"," "],"~:items",["~#list",[["^ ","^0","~:html","~:content",["^3",["^ ","^4","clj-long"],"1"],"~:value","1"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-long"],"2"],"^;","2"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-string"],"\"a\""],"^;","\"a\""]]],"^;","[1 2 \"a\"]"]
+;; <=
+
+;; **
+;;; This means that we can always move from a representation to another without many problems. A *series* can be treated as a Clojure vector if we want to:
+;; **
+
+;; @@ [clj]
+(map inc (pt/series (range 3)))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:list-like","~:open",["~:span",["^ ","~:class","clj-lazy-seq"],"("],"~:close",["^3",["^ ","^4","clj-lazy-seq"],")"],"~:separator",["^3"," "],"~:items",["~#list",[["^ ","^0","~:html","~:content",["^3",["^ ","^4","clj-long"],"1"],"~:value","1"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-long"],"2"],"^;","2"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-long"],"3"],"^;","3"]]],"^;","(1 2 3)"]
+;; <=
+
+;; **
+;;; But when we do this we lose metadata tied to it. The difference with regular vectors is mostly this metadata, a *series* specifically:
+;;; 
+;;; - can have a name
+;;; - has a *dtype*
+;;; - has an index that can be freely named
+;;; 
+;;; Let's see a few examples:
+;; **
+
+;; @@ [clj]
+(pt/series {:name "my-series"})
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"name    my-series\ndtype: object"],"~:value","name    my-series\ndtype: object"]
+;; <=
+
+;; **
+;;; We just created an empty *series* with the name "my-series" to show that it can exist even with just metadata. The map passed as an argument lets you add other options to the function call without bothering about their position (in Python there is a clear distinction between *arguments* and *keyword arguments*, [more info](https://treyhunner.com/2018/04/keyword-arguments-in-python/)).
+;;; 
+;;; We can combine arguments together to get the wanted outcome
+;; **
+
+;; @@ [clj]
+(pt/series 1 {:name "my-series" :index ["idx"]})
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"idx    1\nName: my-series, dtype: int64"],"~:value","idx    1\nName: my-series, dtype: int64"]
+;; <=
+
+;; **
+;;; ### Indexing and subsetting
+;;; 
+;;; Now "my-series" has a name, a value and a named index. This distinction is very important in *panthera*: indexing can be done by name and by position.
+;; **
+
+;; @@ [clj]
+(-> (pt/series (range 5) {:name "my-series" :index ["a" "b" "c" "d" "e"]})
+    (pt/select-rows [0 3]))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"a    0\nd    3\nName: my-series, dtype: int64"],"~:value","a    0\nd    3\nName: my-series, dtype: int64"]
+;; <=
+
+;; @@ [clj]
+(-> (pt/series (range 5) {:name "my-series" :index ["a" "b" "c" "d" "e"]})
+    (pt/select-rows ["a" "d"] :loc))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"a    0\nd    3\nName: my-series, dtype: int64"],"~:value","a    0\nd    3\nName: my-series, dtype: int64"]
+;; <=
+
+;; **
+;;; As you can see above we were able to get the same values from the *series*, but the first time we used pure positional indexing, while the second one we used named indexing.
+;;; 
+;;; This isn't something logical, it just works like this in pandas. So you'll have to memorize:
+;;; 
+;;; - `:iloc`: positional indexing
+;;; - `:loc`: named indexing or booleans
+;;; 
+;;; Be aware that the result of this can be this behaviour:
+;; **
+
+;; @@ [clj]
+(-> (pt/series (range 5) {:name "my-series" :index (map #(+ 100 %) (range 5))})
+    (pt/select-rows [0 3] :iloc))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"100    0\n103    3\nName: my-series, dtype: int64"],"~:value","100    0\n103    3\nName: my-series, dtype: int64"]
+;; <=
+
+;; @@ [clj]
+(-> (pt/series (range 5) {:name "my-series" :index (map #(+ 100 %) (range 5))})
+    (pt/select-rows [100 103] :loc))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"100    0\n103    3\nName: my-series, dtype: int64"],"~:value","100    0\n103    3\nName: my-series, dtype: int64"]
+;; <=
+
+;; @@ [clj]
+(-> (pt/series (range 5) {:name "my-series"})
+    (pt/select-rows [0 3] :loc))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0    0\n3    3\nName: my-series, dtype: int64"],"~:value","0    0\n3    3\nName: my-series, dtype: int64"]
+;; <=
+
+;; **
+;;; What happens above is that somewhat unexpectedly we get always the same values. Let's review every cell by itself:
+;;; 
+;;; - the first time our series can be thought as a map like `{100 0 101 1 102 2 ...}`, but this in panthera doesn't change the fact that the first value is 0, the second is 1 and so on. So by getting `[0 3]` the result is a *series* with the first and fourth values
+;;; - the second time we ask for named indices, and this for Clojurians is probably the clearest case: `(select-keys {100 0 101 1 102 2 ...} [100 103])` would give the same result
+;;; - the last case is probably the least clear, we ask for named indices (`:loc`), but they are integers and they are positional. This happens because when we don't have named indices both *serieses* and *data-frames* assign a monotonically increasing index that has the value of the index itself as a label. If we had to represent a panthera index in pure Clojure it would be something like `{0 "0" 1 "1" 2 "2" ...}`
+;;; 
+;;; There's another way to subset by index: slicing
+;; **
+
+;; @@ [clj]
+(-> (pt/series (range 10))
+    (pt/select-rows (pt/slice 3 6)))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"3    3\n4    4\n5    5\ndtype: int64"],"~:value","3    3\n4    4\n5    5\ndtype: int64"]
+;; <=
+
+;; @@ [clj]
+(-> (pt/series (range 5) {:name "my-series" :index ["a" "b" "c" "d" "e"]})
+    (pt/select-rows (pt/slice "a" "d") :loc))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"a    0\nb    1\nc    2\nd    3\nName: my-series, dtype: int64"],"~:value","a    0\nb    1\nc    2\nd    3\nName: my-series, dtype: int64"]
+;; <=
+
+;; **
+;;; ### Math and stats
+;;; 
+;;; Math is easy with panthera! The only thing to keep in mind is that operations are **vectorized**, so something like `(+ [1 2 3] 1)` would result in `[2 3 4]`.
+;;; 
+;;; To avoid confusion the panthera operations are named differently than the core functions (`+`, `-`, `*`, etc).
+;; **
+
+;; @@ [clj]
+(pt/add (pt/series [1 2 3]) 1)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0    2\n1    3\n2    4\ndtype: int64"],"~:value","0    2\n1    3\n2    4\ndtype: int64"]
+;; <=
+
+;; @@ [clj]
+(pt/pow (pt/series (range 5)) 3)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0     0\n1     1\n2     8\n3    27\n4    64\ndtype: int64"],"~:value","0     0\n1     1\n2     8\n3    27\n4    64\ndtype: int64"]
+;; <=
+
+;; @@ [clj]
+(pt/add (pt/series [1 2 3]) 1 (pt/series [-1 -2 -3]))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0    1\n1    1\n2    1\ndtype: int64"],"~:value","0    1\n1    1\n2    1\ndtype: int64"]
+;; <=
+
+;; **
+;;; The only note about these operations is that in order to work the first argument has to be a panthera data structure.
+;;; 
+;;; There are more advanced stats functions besides the more regular ones:
+;; **
+
+;; @@ [clj]
+(pt/mean (pt/series (range 10)))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-double"],"4.5"],"~:value","4.5"]
+;; <=
+
+;; @@ [clj]
+(pt/kurtosis (pt/series (concat (range 10) [100])))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-double"],"10.712688874485469"],"~:value","10.712688874485469"]
+;; <=
+
+;; @@ [clj]
+(pt/skew (pt/series (concat (range 10) [100])))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-double"],"3.2568924988901746"],"~:value","3.2568924988901746"]
+;; <=
+
+;; @@ [clj]
+(pt/var (pt/series (concat (range 10) [100])))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-double"],"837.3636363636364"],"~:value","837.3636363636364"]
+;; <=
+
+;; @@ [clj]
+(pt/corr (pt/series (range 10)) (pt/series (range 9 0 -1)))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-double"],"-1.0"],"~:value","-1.0"]
+;; <=
+
+;; **
+;;; ### Conversions
+;;; 
+;;; It might happen that you'd like to work with different data types than the ones inferred by panthera. The advice here is to do this only on the Python side of things.
+;; **
+
+;; @@ [clj]
+(pt/->numeric (pt/series ["1" "2"]))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0    1\n1    2\ndtype: int64"],"~:value","0    1\n1    2\ndtype: int64"]
+;; <=
+
+;; @@ [clj]
+(pt/->datetime "2019-01-01")
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"2019-01-01 00:00:00"],"~:value","2019-01-01 00:00:00"]
+;; <=
+
+;; @@ [clj]
+(pt/->datetime (pt/series ["2019-01-01" "2019-02-01"]))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0   2019-01-01\n1   2019-02-01\ndtype: datetime64[ns]"],"~:value","0   2019-01-01\n1   2019-02-01\ndtype: datetime64[ns]"]
+;; <=
+
+;; **
+;;; Below an example of why you should be careful to deal with different data types in panthera
+;; **
+
+;; @@ [clj]
+(-> (pt/series ["2019-01-01" "2019-02-01"])
+    pt/->datetime
+    pt/->clj)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:list-like","~:open",["~:span",["^ ","~:class","clj-vector"],"["],"~:close",["^3",["^ ","^4","clj-vector"],"]"],"~:separator",["^3"," "],"~:items",["~#list",[["^ ","^0","^1","^2",["^3",["^ ","^4","clj-map"],"{"],"^5",["^3",["^ ","^4","clj-map"],"}"],"^6",["^3",", "],"^7",["^8",[["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","~:html","~:content",["^3",["^ ","^4","clj-keyword"],":unnamed"],"~:value",":unnamed"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-unkown"],"2019-01-01 00:00:00"],"^;","2019-01-01 00:00:00"]]],"^;","[:unnamed 2019-01-01 00:00:00]"]]],"^;","{:unnamed 2019-01-01 00:00:00}"],["^ ","^0","^1","^2",["^3",["^ ","^4","clj-map"],"{"],"^5",["^3",["^ ","^4","clj-map"],"}"],"^6",["^3",", "],"^7",["^8",[["^ ","^0","^1","^2",null,"^5",null,"^6",["^3"," "],"^7",["^8",[["^ ","^0","^9","^:",["^3",["^ ","^4","clj-keyword"],":unnamed"],"^;",":unnamed"],["^ ","^0","^9","^:",["^3",["^ ","^4","clj-unkown"],"2019-02-01 00:00:00"],"^;","2019-02-01 00:00:00"]]],"^;","[:unnamed 2019-02-01 00:00:00]"]]],"^;","{:unnamed 2019-02-01 00:00:00}"]]],"^;","[{:unnamed 2019-01-01 00:00:00} {:unnamed 2019-02-01 00:00:00}]"]
+;; <=
+
+;; @@ [clj]
+(-> (pt/series ["2019-01-01" "2019-02-01"])
+    pt/->datetime
+    pt/->clj
+    first
+    :unnamed
+    type)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-keyword"],":pyobject"],"~:value",":pyobject"]
+;; <=
+
+;; **
+;;; The safest way to deal with dates on the Clojure side of things is to convert them to strings
+;; **
+
+;; @@ [clj]
+(-> (pt/series ["2019-01-01" "2019-02-01"])
+    pt/->datetime
+    pt/->clj
+    first
+    :unnamed
+    str)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-string"],"\"2019-01-01 00:00:00\""],"~:value","\"2019-01-01 00:00:00\""]
+;; <=
+
+;; **
+;;; You can have fun with regular numeric types as well
+;; **
+
+;; @@ [clj]
+(pt/astype (pt/series [1 2 3]) :float32)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0    1.0\n1    2.0\n2    3.0\ndtype: float32"],"~:value","0    1.0\n1    2.0\n2    3.0\ndtype: float32"]
+;; <=
+
+;; **
+;;; ### Reshaping
+;;; 
+;;; There are many facilities to let you *hack 'n' slash* data almost however you want
+;; **
+
+;; @@ [clj]
+(pt/cut (pt/series (range 10)) 3)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0    (-0.009, 3.0]\n1    (-0.009, 3.0]\n2    (-0.009, 3.0]\n3    (-0.009, 3.0]\n4       (3.0, 6.0]\n5       (3.0, 6.0]\n6       (3.0, 6.0]\n7       (6.0, 9.0]\n8       (6.0, 9.0]\n9       (6.0, 9.0]\ndtype: category\nCategories (3, interval[float64]): [(-0.009, 3.0] < (3.0, 6.0] < (6.0, 9.0]]"],"~:value","0    (-0.009, 3.0]\n1    (-0.009, 3.0]\n2    (-0.009, 3.0]\n3    (-0.009, 3.0]\n4       (3.0, 6.0]\n5       (3.0, 6.0]\n6       (3.0, 6.0]\n7       (6.0, 9.0]\n8       (6.0, 9.0]\n9       (6.0, 9.0]\ndtype: category\nCategories (3, interval[float64]): [(-0.009, 3.0] < (3.0, 6.0] < (6.0, 9.0]]"]
+;; <=
+
+;; **
+;;; Intervals aren't handled (yet) on the Clojure side, so keep 'em strictly in Python if you want to deal with them.
+;;; 
+;;; With `factorize` you can convert values to ints, so basically you get categories.
+;; **
+
+;; @@ [clj]
+(pt/factorize (pt/series [:a :b :c]))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"(array([0, 1, 2]), Index(['a', 'b', 'c'], dtype='object'))"],"~:value","(array([0, 1, 2]), Index(['a', 'b', 'c'], dtype='object'))"]
+;; <=
+
+;; **
+;;; With `remap` yu can, well, *remap* your values however you like. Just be aware that you have to pass `remap` every value present in the series in the new encoding, otherwise those not specified will be interpreted as NaNs.
+;; **
+
+;; @@ [clj]
+(pt/remap (pt/series [:a :b :c]) {:a "this" :b "that"})
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0    this\n1    that\n2     NaN\ndtype: object"],"~:value","0    this\n1    that\n2     NaN\ndtype: object"]
+;; <=
+
+;; **
+;;; An example on one way to deal with `remap` when you want to remap only some values
+;; **
+
+;; @@ [clj]
+(def remapper 
+    (-> (pt/series [:a :b :c :d :e :f :g :h :i :j])
+        pt/unique
+        (#(zipmap % %))
+        (assoc "e" "only-this-one")))
+
+(pt/remap
+  (pt/series [:a :b :c :d :e :f :g :h :i :j])
+  remapper)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0                a\n1                b\n2                c\n3                d\n4    only-this-one\n5                f\n6                g\n7                h\n8                i\n9                j\ndtype: object"],"~:value","0                a\n1                b\n2                c\n3                d\n4    only-this-one\n5                f\n6                g\n7                h\n8                i\n9                j\ndtype: object"]
+;; <=
+
+;; **
+;;; `rolling` lets you calculate statistics on a rolling window basis
+;; **
+
+;; @@ [clj]
+(pt/rolling (pt/series (range 10)) 2)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"Rolling [window=2,center=False,axis=0]"],"~:value","Rolling [window=2,center=False,axis=0]"]
+;; <=
+
+;; @@ [clj]
+(-> (pt/series (range 10))
+    (pt/rolling 2)
+    pt/mean)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0    NaN\n1    0.5\n2    1.5\n3    2.5\n4    3.5\n5    4.5\n6    5.5\n7    6.5\n8    7.5\n9    8.5\ndtype: float64"],"~:value","0    NaN\n1    0.5\n2    1.5\n3    2.5\n4    3.5\n5    4.5\n6    5.5\n7    6.5\n8    7.5\n9    8.5\ndtype: float64"]
+;; <=
+
+;; **
+;;; ### Missing values
+;;; 
+;;; Dealing with missing values is what really makes the difference between a full-fledged data analysis framework and much more limited solutions.
+;;; 
+;;; panthera gives you many options to try easing the pain a bit
+;; **
+
+;; @@ [clj]
+(pt/dropna (pt/series [1 2 nil 3]))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0    1.0\n1    2.0\n3    3.0\ndtype: float64"],"~:value","0    1.0\n1    2.0\n3    3.0\ndtype: float64"]
+;; <=
+
+;; **
+;;; Note that though the name might let you think that we're mutating the original series, this is similar to Clojure's `drop`
+;; **
+
+;; @@ [clj]
+(def my-srs (pt/series [1 2 nil 3]))
+
+(pt/dropna my-srs)
+my-srs
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0    1.0\n1    2.0\n2    NaN\n3    3.0\ndtype: float64"],"~:value","0    1.0\n1    2.0\n2    NaN\n3    3.0\ndtype: float64"]
+;; <=
+
+;; **
+;;; There are various ways to check if your data contains some missing observation. The easiest and fastest one is `hasnans?`.
+;; **
+
+;; @@ [clj]
+(pt/hasnans? (pt/series (concat (range 1000) [nil])))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-boolean"],"true"],"~:value","true"]
+;; <=
+
+;; **
+;;; `hasnans?` is a cached value, but this shouldn't be an issue considering that everything is as immutable as possible.
+;;; 
+;;; This is another potentially slower way to do the same thing
+;; **
+
+;; @@ [clj]
+(pt/all? (pt/not-na? (pt/series (concat (range 1000) [nil]))))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-boolean"],"false"],"~:value","false"]
+;; <=
+
+;; **
+;;; Of course `not-na?` and `all?` have their uses (for instance if you pass the result of `not-na?` to `select-rows` you'll filter NaNs out of the series).
+;;; 
+;;; panthera's workhorse to deal with missing observations is `fill-na` which lets you assign a value to NaNs
+;; **
+
+;; @@ [clj]
+(pt/fill-na (pt/series [1 2 nil 4]) 3)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"0    1.0\n1    2.0\n2    3.0\n3    4.0\ndtype: float64"],"~:value","0    1.0\n1    2.0\n2    3.0\n3    4.0\ndtype: float64"]
+;; <=
+
+;; **
+;;; <a id='dataframe'></a>
+;;; ## Data-frame
+;;; 
+;;; A data-frame is basically a collection of serieses as columns. In other words it's a rectangular data structure akin to a matrix, but while the latter is usually only numeric, data-frames can have mixed column types.
+;;; 
+;;; ### Create
+;; **
+
+;; @@ [clj]
+(pt/data-frame [{:a 1 :b 2} {:a 3 :b 4}])
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"   a  b\n0  1  2\n1  3  4"],"~:value","   a  b\n0  1  2\n1  3  4"]
+;; <=
+
+;; **
+;;; The easiest way to create a data-frame is with a vector of maps where every map is a row, keys are columns names and values, well, are corresponding values.
+;;; 
+;;; As we saw earlier data-frames are a collection of serieses, so we can create one starting from a bunch of them.
+;; **
+
+;; @@ [clj]
+(pt/data-frame [(pt/series [1 2 3]) (pt/series [4 5 6])])
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"   0  1  2\n0  1  2  3\n1  4  5  6"],"~:value","   0  1  2\n0  1  2  3\n1  4  5  6"]
+;; <=
+
+;; @@ [clj]
+(pt/data-frame {:a (pt/series [1 2 3]) :b (pt/series [:x :y :z])})
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"   a  b\n0  1  x\n1  2  y\n2  3  z"],"~:value","   a  b\n0  1  x\n1  2  y\n2  3  z"]
+;; <=
+
+;; @@ [clj]
+(pt/dtype (pt/data-frame {:a (pt/series [1 2 3]) :b (pt/series [:x :y :z])}))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"a     int64\nb    object\ndtype: object"],"~:value","a     int64\nb    object\ndtype: object"]
+;; <=
+
+;; **
+;;; Above we see that panthera doesn't complain about the column `a` having type `int64` and `b` having type `object` and we can keep working on them as much as we want.
+;;; 
+;;; ### Indexing and subsetting
+;;; 
+;;; Now we have two dimensions to work with! No worries, it is always possible to operate on both of them. But first let's check all the metadata available to us
+;; **
+
+;; @@ [clj]
+(def df (pt/data-frame [{:a 1 :b 2} {:a 3 :b 4}]))
+
+(pt/index df)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"RangeIndex(start=0, stop=2, step=1)"],"~:value","RangeIndex(start=0, stop=2, step=1)"]
+;; <=
+
+;; @@ [clj]
+(pt/names df)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"Index(['a', 'b'], dtype='object')"],"~:value","Index(['a', 'b'], dtype='object')"]
+;; <=
+
+;; **
+;;; So, what we saw for serieses works for data-frames as well
+;; **
+
+;; @@ [clj]
+(def df (pt/data-frame (map #(zipmap [:a :b :c] %) (partition 3 (range 30)))))
+
+(pt/select-rows df [0 5])
+;; @@
+;; ->
+;;; getting a
+;;; getting b
+;;; getting c
+;;; getting a
+;;; getting b
+;;; getting c
+;;; getting a
+;;; getting b
+;;; getting c
+;;; getting a
+;;; getting b
+;;; getting c
+;;; getting a
+;;; getting b
+;;; getting c
+;;; getting a
+;;; getting b
+;;; getting c
+;;; getting a
+;;; getting b
+;;; getting c
+;;; getting a
+;;; getting b
+;;; getting c
+;;; getting a
+;;; getting b
+;;; getting c
+;;; getting a
+;;; getting b
+;;; getting c
+;; <-
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"      a     b     c\n0  None  None  None\n5  None  None  None"],"~:value","      a     b     c\n0  None  None  None\n5  None  None  None"]
+;; <=
+
+;; @@ [clj]
+(pt/select-rows df (pt/slice 2 5))
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"      a     b     c\n2  None  None  None\n3  None  None  None\n4  None  None  None"],"~:value","      a     b     c\n2  None  None  None\n3  None  None  None\n4  None  None  None"]
+;; <=
+
+;; **
+;;; The new thing is subsetting columns, we can do this by name with `subset-cols`. You can select any number of columns in this way, as long as they are in the given data-frame
+;; **
+
+;; @@ [clj]
+(pt/subset-cols df :a :c)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"      a     c\n0  None  None\n1  None  None\n2  None  None\n3  None  None\n4  None  None\n5  None  None\n6  None  None\n7  None  None\n8  None  None\n9  None  None"],"~:value","      a     c\n0  None  None\n1  None  None\n2  None  None\n3  None  None\n4  None  None\n5  None  None\n6  None  None\n7  None  None\n8  None  None\n9  None  None"]
+;; <=
+
+;; **
+;;; ### Math and stats
+;; **
+
+;; @@ [clj]
+(pt/mean df)
+;; @@
+;; =>
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-unkown"],"a   NaN\nb   NaN\nc   NaN\ndtype: float64"],"~:value","a   NaN\nb   NaN\nc   NaN\ndtype: float64"]
+;; <=
+
+;; @@ [clj]
+
+;; @@
