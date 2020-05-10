@@ -17,16 +17,18 @@
                   ["vcs" "commit" "Begin %s"]
                   ["vcs" "push"]]
 
-
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [clj-python/libpython-clj "1.40"]
                  ;; pinkgorilla-vizualisation
-                 [org.pinkgorilla/gorilla-renderable "3.0.7"] ; to implement pink-gorilla renderer
-             ]
+                 [org.pinkgorilla/gorilla-notebook "0.4.17"]
+                 [org.pinkgorilla/gorilla-renderable "3.0.8"]] ; to implement pink-gorilla renderer
 
   :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
   :source-paths ["src"]
   :resource-paths ["resources"]
+  
+  :pinkgorilla {:runtime-config "./profiles/notebook/config.edn"}
+  
   ;:repl-options {:init-ns ta.model.single}
   :profiles {:notebook {; run the pink-gorilla notebook (standalone, or in repl)
                        ; important to keep this dependency in here only, as we do not want to
@@ -55,7 +57,8 @@
                                        try-if-let          [[:block 1]]}}}}
 
   :plugins [[lein-ancient "0.6.15"]
-            [min-java-version "0.1.0"]]
+            [min-java-version "0.1.0"]
+            [org.pinkgorilla/lein-pinkgorilla "0.0.10"]]
 
   :aliases {"bump-version"
             ["change" "version" "leiningen.release/bump-version"]

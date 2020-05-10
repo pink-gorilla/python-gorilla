@@ -3,8 +3,9 @@
    [clojure.java.io :refer [as-file #_file]]
    [libpython-clj.require :refer [require-python]]
    [libpython-clj.python :as py :refer [py. #_py.. #_py.-]]
-   [pinkgorilla.ui.image :refer [image-view]]) ; bring BufferedImage renderer to scope
-  (:import java.awt.image.BufferedImage)
+   [pinkgorilla.ui.image :refer [image-view]]
+   [pinkgorilla.notebook-app.system])
+  (:import java.awt.image.BufferedImage)  ; bring BufferedImage renderer to scope
   (:import [java.awt Graphics2D #_Image #_Color])
   (:import [java.awt.image BufferedImage #_BufferedImageOp])
   (:import [javax.imageio ImageIO #_IIOImage #_ImageWriter #_ImageWriteParam])
@@ -15,8 +16,19 @@
            javax.imageio.ImageIO
            java.awt.image.BufferedImage))
 
+(defn py-initialize! []
+  (let [config (pinkgorilla.notebook-app.system/get-setting [:python])]
+    (println "python config: " config)
+    (py/initialize!
+     :python-executable (:python-executable config)
+     :library-path (:library-path config))))
+
+(py-initialize!)
+
+
 ; stolen from:
 ; https://github.com/mikera/imagez/blob/develop/src/main/clojure/mikera/image/core.clj
+
 
 (defn new-image
   "Creates a new BufferedImage with the specified width and height.
@@ -95,11 +107,8 @@
 ;;;; have to set the headless mode before requiring pyplot
 
 
-(defn python-init! [])
-
 (def mplt (py/import-module "matplotlib"))
 (py. mplt "use" "Agg")
-
 (require-python 'matplotlib.pyplot)
 (require-python 'matplotlib.backends.backend_agg)
 (require-python 'numpy)
@@ -107,7 +116,7 @@
 (defmacro with-show
   "Takes forms with mathplotlib.pyplot to then show locally"
   [& body]
-  `(let [tempfile# (File/createTempFile "gigasquid_plot" ".png")
+  `(let [tempfile# (File/createTempFile "py_gorilla_plot" ".png")
          path#     (.getAbsolutePath tempfile#)
          _# (matplotlib.pyplot/clf)
          fig# (matplotlib.pyplot/figure)
@@ -115,4 +124,14 @@
      ~(cons 'do body)
      (py. agg-canvas# "draw")
      (matplotlib.pyplot/savefig path#)
+     (matplotlib.pyplot/close fig#)
      (image-view (load-image tempfile#))))
+
+(comment
+
+  (macroexpand
+   (with-show
+     (matplotlib.pyplot/plot [[1 2 3 4 5] [1 2 3 4 10]] :label "linear")))
+
+  ;
+  )

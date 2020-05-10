@@ -12,10 +12,16 @@ UI renderers for libPythonClj + Panthera
 
 # Usage (notebook as library)
 
+Pyrhon cnfiguratun (see config.edn)
+```
+:python {:python-executable "~/.conda/envs/pyclj/bin/python3.7"
+           :library-path "~/.conda/envs/pyclj/lib/libpython3.7m.dylib"}
+``` 
+
 ## run notebook
 
 ```
-lein notebook
+lein pinkgorilla
 ```
 This will run pinkgorilla notebook as a library, with demo notebooks loaded into the explorer.
 
