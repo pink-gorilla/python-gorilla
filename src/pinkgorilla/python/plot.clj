@@ -4,7 +4,7 @@
    [libpython-clj.require :refer [require-python]]
    [libpython-clj.python :as py :refer [py. #_py.. #_py.-]]
    [pinkgorilla.ui.image :refer [image-view]]
-   [pinkgorilla.notebook-app.system])
+   [pinkgorilla.python.core :refer [py-initialize!]])
   (:import java.awt.image.BufferedImage)  ; bring BufferedImage renderer to scope
   (:import [java.awt Graphics2D #_Image #_Color])
   (:import [java.awt.image BufferedImage #_BufferedImageOp])
@@ -16,15 +16,7 @@
            javax.imageio.ImageIO
            java.awt.image.BufferedImage))
 
-(defn py-initialize! []
-  (let [config (pinkgorilla.notebook-app.system/get-setting [:python])]
-    (println "python config: " config)
-    (py/initialize!
-     :python-executable (:python-executable config)
-     :library-path (:library-path config))))
-
 (py-initialize!)
-
 
 ; stolen from:
 ; https://github.com/mikera/imagez/blob/develop/src/main/clojure/mikera/image/core.clj
@@ -124,7 +116,7 @@
      ~(cons 'do body)
      (py. agg-canvas# "draw")
      (matplotlib.pyplot/savefig path#)
-     (matplotlib.pyplot/close fig#)
+     (matplotlib.pyplot/close fig#) ; https://stackoverflow.com/questions/21884271/warning-about-too-many-open-figures
      (image-view (load-image tempfile#))))
 
 (comment
