@@ -11,7 +11,12 @@
      :python-executable (:python-executable config)
      :library-path (:library-path config))))
 
-(defn- convert [item]
+(defn- convert 
+  "extracts useful information from an item of a python namespace
+   this exrtraction is useful, as some python items contain clj
+   namespace which cannot be serialized with edn.
+   "
+  [item]
   (if (map? item)
     (select-keys item [:name :doc :type])
     {}))
