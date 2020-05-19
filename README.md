@@ -12,7 +12,8 @@ UI renderers for libPythonClj + Panthera
 
 # Usage (notebook as library)
 
-Pyrhon cnfiguratun (see config.edn)
+Python configuraton (see config.edn)
+
 ```
 :python {:python-executable "~/.conda/envs/pyclj/bin/python3.7"
            :library-path "~/.conda/envs/pyclj/lib/libpython3.7m.dylib"}
