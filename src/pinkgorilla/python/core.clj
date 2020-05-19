@@ -11,7 +11,7 @@
      :python-executable (:python-executable config)
      :library-path (:library-path config))))
 
-(defn- convert 
+(defn- convert
   "extracts useful information from an item of a python namespace
    this exrtraction is useful, as some python items contain clj
    namespace which cannot be serialized with edn.
