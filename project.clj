@@ -1,4 +1,4 @@
-(defproject org.pinkgorilla/python-gorilla "0.0.14"
+(defproject org.pinkgorilla/python-gorilla "0.0.15-SNAPSHOT"
   :description "PinkGorilla<->Python interop (libpython-clj)"
   :license {:name "MIT"}
   :deploy-repositories [["releases" {:url "https://clojars.org/repo"
